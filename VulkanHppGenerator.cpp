@@ -118,10 +118,12 @@ void VulkanHppGenerator::generateExtensionInspectionFile() const
 #ifndef VULKAN_EXTENSION_INSPECTION_HPP
 #  define VULKAN_EXTENSION_INSPECTION_HPP
 
+#ifndef VULKAN_HPP_USE_STD_MODULE
 #include <map>
 #include <set>
 #include <string>
 #include <vector>
+#endif
 #include <vulkan/${api}.hpp>
 
 namespace VULKAN_HPP_NAMESPACE
@@ -572,8 +574,10 @@ void VulkanHppGenerator::generateRAIIHppFile() const
 #ifndef VULKAN_RAII_HPP
 #define VULKAN_RAII_HPP
 
+#ifndef VULKAN_HPP_USE_STD_MODULE
 #include <memory>   // std::unique_ptr
 #include <utility>  // std::exchange, std::forward
+#endif
 #include <vulkan/${api}.hpp>
 
 #if !defined( VULKAN_HPP_DISABLE_ENHANCED_MODE )
@@ -660,7 +664,9 @@ void VulkanHppGenerator::generateSharedHppFile() const
 #define VULKAN_SHARED_HPP
 
 #include <vulkan/${api}.hpp>
+#ifndef VULKAN_HPP_USE_STD_MODULE
 #include <atomic>  // std::atomic_size_t
+#endif
 
 
 namespace VULKAN_HPP_NAMESPACE
@@ -724,7 +730,9 @@ void VulkanHppGenerator::generateStructsHppFile() const
 #ifndef VULKAN_STRUCTS_HPP
 #  define VULKAN_STRUCTS_HPP
 
+#ifndef VULKAN_HPP_USE_STD_MODULE
 #include <cstring>  // strcmp
+#endif
 
 namespace VULKAN_HPP_NAMESPACE
 {
@@ -749,10 +757,12 @@ void VulkanHppGenerator::generateToStringHppFile() const
 
 #include <vulkan/${api}_enums.hpp>
 
+#ifndef VULKAN_HPP_USE_STD_MODULE
 #if __cpp_lib_format
 #  include <format>   // std::format
 #else
 #  include <sstream>  // std::stringstream
+#endif
 #endif
 
 namespace VULKAN_HPP_NAMESPACE
@@ -783,6 +793,11 @@ void VulkanHppGenerator::generateCppModuleFile() const
 // Any feedback is welcome on https://github.com/KhronosGroup/Vulkan-Hpp/issues.
 
 module;
+
+#ifdef VULKAN_HPP_USE_STD_MODULE
+import std;
+import std.compat;
+#endif
 
 #include <vulkan/${api}.hpp>
 #include <vulkan/${api}_extension_inspection.hpp>

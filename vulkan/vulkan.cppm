@@ -10,6 +10,11 @@
 
 module;
 
+#ifdef VULKAN_HPP_USE_STD_MODULE
+import std;
+import std.compat;
+#endif
+
 #include <vulkan/vulkan.hpp>
 #include <vulkan/vulkan_extension_inspection.hpp>
 #include <vulkan/vulkan_format_traits.hpp>

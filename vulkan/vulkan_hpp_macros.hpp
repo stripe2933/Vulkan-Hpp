@@ -29,10 +29,12 @@
 #endif
 
 // include headers holding feature-test macros
-#if 20 <= VULKAN_HPP_CPP_VERSION
-#  include <version>
-#else
-#  include <ciso646>
+#ifndef VULKAN_HPP_USE_STD_MODULE
+#  if 20 <= VULKAN_HPP_CPP_VERSION
+#    include <version>
+#  else
+#    include <ciso646>
+#  endif
 #endif
 
 #if defined( VULKAN_HPP_DISABLE_ENHANCED_MODE )
@@ -279,7 +281,9 @@ namespace VULKAN_HPP_NAMESPACE
 #endif
 
 #if !defined( VULKAN_HPP_EXPECTED ) && ( 23 <= VULKAN_HPP_CPP_VERSION ) && defined( __cpp_lib_expected )
-#  include <expected>
+#  ifndef VULKAN_HPP_USE_STD_MODULE
+#    include <expected>
+#  endif
 #  define VULKAN_HPP_EXPECTED   std::expected
 #  define VULKAN_HPP_UNEXPECTED std::unexpected
 #endif

@@ -10,10 +10,12 @@
 
 #include <vulkan/vulkan_enums.hpp>
 
-#if __cpp_lib_format
-#  include <format>  // std::format
-#else
-#  include <sstream>  // std::stringstream
+#ifndef VULKAN_HPP_USE_STD_MODULE
+#  if __cpp_lib_format
+#    include <format>  // std::format
+#  else
+#    include <sstream>  // std::stringstream
+#  endif
 #endif
 
 namespace VULKAN_HPP_NAMESPACE

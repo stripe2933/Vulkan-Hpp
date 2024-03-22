@@ -8,23 +8,25 @@
 #ifndef VULKAN_HPP
 #define VULKAN_HPP
 
-#include <algorithm>
-#include <array>     // ArrayWrapperND
-#include <string.h>  // strnlen
-#include <string>    // std::string
+#ifndef VULKAN_HPP_USE_STD_MODULE
+#  include <algorithm>
+#  include <array>     // ArrayWrapperND
+#  include <string.h>  // strnlen
+#  include <string>    // std::string
+#endif
 #include <vulkan/vulkan.h>
 #include <vulkan/vulkan_hpp_macros.hpp>
 
-#if 17 <= VULKAN_HPP_CPP_VERSION
+#if 17 <= VULKAN_HPP_CPP_VERSION && !defined( VULKAN_HPP_USE_STD_MODULE )
 #  include <string_view>
 #endif
 
-#if !defined( VULKAN_HPP_DISABLE_ENHANCED_MODE )
+#if !defined( VULKAN_HPP_DISABLE_ENHANCED_MODE ) && !defined( VULKAN_HPP_USE_STD_MODULE )
 #  include <tuple>   // std::tie
 #  include <vector>  // std::vector
 #endif
 
-#if !defined( VULKAN_HPP_NO_EXCEPTIONS )
+#if !defined( VULKAN_HPP_NO_EXCEPTIONS ) && !defined( VULKAN_HPP_USE_STD_MODULE )
 #  include <system_error>  // std::is_error_code_enum
 #endif
 
@@ -38,7 +40,7 @@
 #  elif defined( _WIN32 ) && !defined( VULKAN_HPP_NO_WIN32_PROTOTYPES )
 using HINSTANCE = struct HINSTANCE__ *;
 #    if defined( _WIN64 )
-using FARPROC   = int64_t( __stdcall * )();
+using FARPROC = int64_t( __stdcall * )();
 #    else
 using FARPROC = int( __stdcall * )();
 #    endif
@@ -48,11 +50,11 @@ extern "C" __declspec( dllimport ) FARPROC __stdcall GetProcAddress( HINSTANCE h
 #  endif
 #endif
 
-#if defined( VULKAN_HPP_HAS_SPACESHIP_OPERATOR )
+#if defined( VULKAN_HPP_HAS_SPACESHIP_OPERATOR ) && !defined( VULKAN_HPP_USE_STD_MODULE )
 #  include <compare>
 #endif
 
-#if defined( VULKAN_HPP_SUPPORT_SPAN )
+#if defined( VULKAN_HPP_SUPPORT_SPAN ) && !defined( VULKAN_HPP_USE_STD_MODULE )
 #  include <span>
 #endif
 
@@ -6873,7 +6875,7 @@ namespace VULKAN_HPP_NAMESPACE
   template <typename T, typename = typename std::enable_if<std::is_integral<T>::value>::type>
   VULKAN_HPP_CONSTEXPR uint32_t apiVersionPatch( T const version )
   {
-    return ( (uint32_t)(version)&0xFFFU );
+    return ( (uint32_t)( version ) & 0xFFFU );
   }
 
   template <typename T, typename = typename std::enable_if<std::is_integral<T>::value>::type>
@@ -6913,7 +6915,7 @@ namespace VULKAN_HPP_NAMESPACE
   VULKAN_HPP_DEPRECATED( "This define is deprecated. VK_API_VERSION_PATCH should be used instead." )
   VULKAN_HPP_CONSTEXPR uint32_t versionPatch( T const version )
   {
-    return ( (uint32_t)(version)&0xFFFU );
+    return ( (uint32_t)( version ) & 0xFFFU );
   }
 
   //=========================
@@ -16703,7 +16705,7 @@ namespace VULKAN_HPP_NAMESPACE
           m_library = dlopen( "libvulkan.1.dylib", RTLD_NOW | RTLD_LOCAL );
         }
 #  elif defined( _WIN32 )
-          m_library = ::LoadLibraryA( "vulkan-1.dll" );
+        m_library = ::LoadLibraryA( "vulkan-1.dll" );
 #  else
 #    error unsupported platform
 #  endif
@@ -17038,8 +17040,8 @@ namespace VULKAN_HPP_NAMESPACE
     PFN_vkCreateXlibSurfaceKHR                        vkCreateXlibSurfaceKHR                        = 0;
     PFN_vkGetPhysicalDeviceXlibPresentationSupportKHR vkGetPhysicalDeviceXlibPresentationSupportKHR = 0;
 #else
-    PFN_dummy vkCreateXlibSurfaceKHR_placeholder                            = 0;
-    PFN_dummy vkGetPhysicalDeviceXlibPresentationSupportKHR_placeholder     = 0;
+    PFN_dummy vkCreateXlibSurfaceKHR_placeholder                        = 0;
+    PFN_dummy vkGetPhysicalDeviceXlibPresentationSupportKHR_placeholder = 0;
 #endif /*VK_USE_PLATFORM_XLIB_KHR*/
 
 #if defined( VK_USE_PLATFORM_XCB_KHR )
@@ -17047,8 +17049,8 @@ namespace VULKAN_HPP_NAMESPACE
     PFN_vkCreateXcbSurfaceKHR                        vkCreateXcbSurfaceKHR                        = 0;
     PFN_vkGetPhysicalDeviceXcbPresentationSupportKHR vkGetPhysicalDeviceXcbPresentationSupportKHR = 0;
 #else
-    PFN_dummy vkCreateXcbSurfaceKHR_placeholder                             = 0;
-    PFN_dummy vkGetPhysicalDeviceXcbPresentationSupportKHR_placeholder      = 0;
+    PFN_dummy vkCreateXcbSurfaceKHR_placeholder                        = 0;
+    PFN_dummy vkGetPhysicalDeviceXcbPresentationSupportKHR_placeholder = 0;
 #endif /*VK_USE_PLATFORM_XCB_KHR*/
 
 #if defined( VK_USE_PLATFORM_WAYLAND_KHR )
@@ -17056,15 +17058,15 @@ namespace VULKAN_HPP_NAMESPACE
     PFN_vkCreateWaylandSurfaceKHR                        vkCreateWaylandSurfaceKHR                        = 0;
     PFN_vkGetPhysicalDeviceWaylandPresentationSupportKHR vkGetPhysicalDeviceWaylandPresentationSupportKHR = 0;
 #else
-    PFN_dummy vkCreateWaylandSurfaceKHR_placeholder                         = 0;
-    PFN_dummy vkGetPhysicalDeviceWaylandPresentationSupportKHR_placeholder  = 0;
+    PFN_dummy vkCreateWaylandSurfaceKHR_placeholder                        = 0;
+    PFN_dummy vkGetPhysicalDeviceWaylandPresentationSupportKHR_placeholder = 0;
 #endif /*VK_USE_PLATFORM_WAYLAND_KHR*/
 
 #if defined( VK_USE_PLATFORM_ANDROID_KHR )
     //=== VK_KHR_android_surface ===
     PFN_vkCreateAndroidSurfaceKHR vkCreateAndroidSurfaceKHR = 0;
 #else
-    PFN_dummy vkCreateAndroidSurfaceKHR_placeholder                         = 0;
+    PFN_dummy vkCreateAndroidSurfaceKHR_placeholder = 0;
 #endif /*VK_USE_PLATFORM_ANDROID_KHR*/
 
 #if defined( VK_USE_PLATFORM_WIN32_KHR )
@@ -17072,8 +17074,8 @@ namespace VULKAN_HPP_NAMESPACE
     PFN_vkCreateWin32SurfaceKHR                        vkCreateWin32SurfaceKHR                        = 0;
     PFN_vkGetPhysicalDeviceWin32PresentationSupportKHR vkGetPhysicalDeviceWin32PresentationSupportKHR = 0;
 #else
-    PFN_dummy vkCreateWin32SurfaceKHR_placeholder                           = 0;
-    PFN_dummy vkGetPhysicalDeviceWin32PresentationSupportKHR_placeholder    = 0;
+    PFN_dummy vkCreateWin32SurfaceKHR_placeholder                        = 0;
+    PFN_dummy vkGetPhysicalDeviceWin32PresentationSupportKHR_placeholder = 0;
 #endif /*VK_USE_PLATFORM_WIN32_KHR*/
 
     //=== VK_EXT_debug_report ===
@@ -17139,7 +17141,7 @@ namespace VULKAN_HPP_NAMESPACE
     //=== VK_GGP_stream_descriptor_surface ===
     PFN_vkCreateStreamDescriptorSurfaceGGP vkCreateStreamDescriptorSurfaceGGP = 0;
 #else
-    PFN_dummy vkCreateStreamDescriptorSurfaceGGP_placeholder                = 0;
+    PFN_dummy vkCreateStreamDescriptorSurfaceGGP_placeholder = 0;
 #endif /*VK_USE_PLATFORM_GGP*/
 
     //=== VK_NV_external_memory_capabilities ===
@@ -17149,7 +17151,7 @@ namespace VULKAN_HPP_NAMESPACE
     //=== VK_NV_external_memory_win32 ===
     PFN_vkGetMemoryWin32HandleNV vkGetMemoryWin32HandleNV = 0;
 #else
-    PFN_dummy vkGetMemoryWin32HandleNV_placeholder                          = 0;
+    PFN_dummy vkGetMemoryWin32HandleNV_placeholder = 0;
 #endif /*VK_USE_PLATFORM_WIN32_KHR*/
 
     //=== VK_KHR_get_physical_device_properties2 ===
@@ -17170,7 +17172,7 @@ namespace VULKAN_HPP_NAMESPACE
     //=== VK_NN_vi_surface ===
     PFN_vkCreateViSurfaceNN vkCreateViSurfaceNN = 0;
 #else
-    PFN_dummy vkCreateViSurfaceNN_placeholder                               = 0;
+    PFN_dummy vkCreateViSurfaceNN_placeholder = 0;
 #endif /*VK_USE_PLATFORM_VI_NN*/
 
     //=== VK_KHR_maintenance1 ===
@@ -17187,8 +17189,8 @@ namespace VULKAN_HPP_NAMESPACE
     PFN_vkGetMemoryWin32HandleKHR           vkGetMemoryWin32HandleKHR           = 0;
     PFN_vkGetMemoryWin32HandlePropertiesKHR vkGetMemoryWin32HandlePropertiesKHR = 0;
 #else
-    PFN_dummy vkGetMemoryWin32HandleKHR_placeholder                         = 0;
-    PFN_dummy vkGetMemoryWin32HandlePropertiesKHR_placeholder               = 0;
+    PFN_dummy vkGetMemoryWin32HandleKHR_placeholder           = 0;
+    PFN_dummy vkGetMemoryWin32HandlePropertiesKHR_placeholder = 0;
 #endif /*VK_USE_PLATFORM_WIN32_KHR*/
 
     //=== VK_KHR_external_memory_fd ===
@@ -17203,8 +17205,8 @@ namespace VULKAN_HPP_NAMESPACE
     PFN_vkImportSemaphoreWin32HandleKHR vkImportSemaphoreWin32HandleKHR = 0;
     PFN_vkGetSemaphoreWin32HandleKHR    vkGetSemaphoreWin32HandleKHR    = 0;
 #else
-    PFN_dummy vkImportSemaphoreWin32HandleKHR_placeholder                   = 0;
-    PFN_dummy vkGetSemaphoreWin32HandleKHR_placeholder                      = 0;
+    PFN_dummy vkImportSemaphoreWin32HandleKHR_placeholder = 0;
+    PFN_dummy vkGetSemaphoreWin32HandleKHR_placeholder    = 0;
 #endif /*VK_USE_PLATFORM_WIN32_KHR*/
 
     //=== VK_KHR_external_semaphore_fd ===
@@ -17235,8 +17237,8 @@ namespace VULKAN_HPP_NAMESPACE
     PFN_vkAcquireXlibDisplayEXT    vkAcquireXlibDisplayEXT    = 0;
     PFN_vkGetRandROutputDisplayEXT vkGetRandROutputDisplayEXT = 0;
 #else
-    PFN_dummy vkAcquireXlibDisplayEXT_placeholder                           = 0;
-    PFN_dummy vkGetRandROutputDisplayEXT_placeholder                        = 0;
+    PFN_dummy vkAcquireXlibDisplayEXT_placeholder    = 0;
+    PFN_dummy vkGetRandROutputDisplayEXT_placeholder = 0;
 #endif /*VK_USE_PLATFORM_XLIB_XRANDR_EXT*/
 
     //=== VK_EXT_display_surface_counter ===
@@ -17277,8 +17279,8 @@ namespace VULKAN_HPP_NAMESPACE
     PFN_vkImportFenceWin32HandleKHR vkImportFenceWin32HandleKHR = 0;
     PFN_vkGetFenceWin32HandleKHR    vkGetFenceWin32HandleKHR    = 0;
 #else
-    PFN_dummy vkImportFenceWin32HandleKHR_placeholder                       = 0;
-    PFN_dummy vkGetFenceWin32HandleKHR_placeholder                          = 0;
+    PFN_dummy vkImportFenceWin32HandleKHR_placeholder = 0;
+    PFN_dummy vkGetFenceWin32HandleKHR_placeholder    = 0;
 #endif /*VK_USE_PLATFORM_WIN32_KHR*/
 
     //=== VK_KHR_external_fence_fd ===
@@ -17305,14 +17307,14 @@ namespace VULKAN_HPP_NAMESPACE
     //=== VK_MVK_ios_surface ===
     PFN_vkCreateIOSSurfaceMVK vkCreateIOSSurfaceMVK = 0;
 #else
-    PFN_dummy vkCreateIOSSurfaceMVK_placeholder                             = 0;
+    PFN_dummy vkCreateIOSSurfaceMVK_placeholder = 0;
 #endif /*VK_USE_PLATFORM_IOS_MVK*/
 
 #if defined( VK_USE_PLATFORM_MACOS_MVK )
     //=== VK_MVK_macos_surface ===
     PFN_vkCreateMacOSSurfaceMVK vkCreateMacOSSurfaceMVK = 0;
 #else
-    PFN_dummy vkCreateMacOSSurfaceMVK_placeholder                           = 0;
+    PFN_dummy vkCreateMacOSSurfaceMVK_placeholder = 0;
 #endif /*VK_USE_PLATFORM_MACOS_MVK*/
 
     //=== VK_EXT_debug_utils ===
@@ -17333,8 +17335,8 @@ namespace VULKAN_HPP_NAMESPACE
     PFN_vkGetAndroidHardwareBufferPropertiesANDROID vkGetAndroidHardwareBufferPropertiesANDROID = 0;
     PFN_vkGetMemoryAndroidHardwareBufferANDROID     vkGetMemoryAndroidHardwareBufferANDROID     = 0;
 #else
-    PFN_dummy vkGetAndroidHardwareBufferPropertiesANDROID_placeholder       = 0;
-    PFN_dummy vkGetMemoryAndroidHardwareBufferANDROID_placeholder           = 0;
+    PFN_dummy vkGetAndroidHardwareBufferPropertiesANDROID_placeholder = 0;
+    PFN_dummy vkGetMemoryAndroidHardwareBufferANDROID_placeholder     = 0;
 #endif /*VK_USE_PLATFORM_ANDROID_KHR*/
 
 #if defined( VK_ENABLE_BETA_EXTENSIONS )
@@ -17347,13 +17349,13 @@ namespace VULKAN_HPP_NAMESPACE
     PFN_vkCmdDispatchGraphIndirectAMDX             vkCmdDispatchGraphIndirectAMDX             = 0;
     PFN_vkCmdDispatchGraphIndirectCountAMDX        vkCmdDispatchGraphIndirectCountAMDX        = 0;
 #else
-    PFN_dummy vkCreateExecutionGraphPipelinesAMDX_placeholder               = 0;
-    PFN_dummy vkGetExecutionGraphPipelineScratchSizeAMDX_placeholder        = 0;
-    PFN_dummy vkGetExecutionGraphPipelineNodeIndexAMDX_placeholder          = 0;
-    PFN_dummy vkCmdInitializeGraphScratchMemoryAMDX_placeholder             = 0;
-    PFN_dummy vkCmdDispatchGraphAMDX_placeholder                            = 0;
-    PFN_dummy vkCmdDispatchGraphIndirectAMDX_placeholder                    = 0;
-    PFN_dummy vkCmdDispatchGraphIndirectCountAMDX_placeholder               = 0;
+    PFN_dummy vkCreateExecutionGraphPipelinesAMDX_placeholder        = 0;
+    PFN_dummy vkGetExecutionGraphPipelineScratchSizeAMDX_placeholder = 0;
+    PFN_dummy vkGetExecutionGraphPipelineNodeIndexAMDX_placeholder   = 0;
+    PFN_dummy vkCmdInitializeGraphScratchMemoryAMDX_placeholder      = 0;
+    PFN_dummy vkCmdDispatchGraphAMDX_placeholder                     = 0;
+    PFN_dummy vkCmdDispatchGraphIndirectAMDX_placeholder             = 0;
+    PFN_dummy vkCmdDispatchGraphIndirectCountAMDX_placeholder        = 0;
 #endif /*VK_ENABLE_BETA_EXTENSIONS*/
 
     //=== VK_EXT_sample_locations ===
@@ -17481,14 +17483,14 @@ namespace VULKAN_HPP_NAMESPACE
     //=== VK_FUCHSIA_imagepipe_surface ===
     PFN_vkCreateImagePipeSurfaceFUCHSIA vkCreateImagePipeSurfaceFUCHSIA = 0;
 #else
-    PFN_dummy vkCreateImagePipeSurfaceFUCHSIA_placeholder                   = 0;
+    PFN_dummy vkCreateImagePipeSurfaceFUCHSIA_placeholder = 0;
 #endif /*VK_USE_PLATFORM_FUCHSIA*/
 
 #if defined( VK_USE_PLATFORM_METAL_EXT )
     //=== VK_EXT_metal_surface ===
     PFN_vkCreateMetalSurfaceEXT vkCreateMetalSurfaceEXT = 0;
 #else
-    PFN_dummy vkCreateMetalSurfaceEXT_placeholder                           = 0;
+    PFN_dummy vkCreateMetalSurfaceEXT_placeholder = 0;
 #endif /*VK_USE_PLATFORM_METAL_EXT*/
 
     //=== VK_KHR_fragment_shading_rate ===
@@ -17521,10 +17523,10 @@ namespace VULKAN_HPP_NAMESPACE
     PFN_vkReleaseFullScreenExclusiveModeEXT        vkReleaseFullScreenExclusiveModeEXT        = 0;
     PFN_vkGetDeviceGroupSurfacePresentModes2EXT    vkGetDeviceGroupSurfacePresentModes2EXT    = 0;
 #else
-    PFN_dummy vkGetPhysicalDeviceSurfacePresentModes2EXT_placeholder        = 0;
-    PFN_dummy vkAcquireFullScreenExclusiveModeEXT_placeholder               = 0;
-    PFN_dummy vkReleaseFullScreenExclusiveModeEXT_placeholder               = 0;
-    PFN_dummy vkGetDeviceGroupSurfacePresentModes2EXT_placeholder           = 0;
+    PFN_dummy vkGetPhysicalDeviceSurfacePresentModes2EXT_placeholder = 0;
+    PFN_dummy vkAcquireFullScreenExclusiveModeEXT_placeholder        = 0;
+    PFN_dummy vkReleaseFullScreenExclusiveModeEXT_placeholder        = 0;
+    PFN_dummy vkGetDeviceGroupSurfacePresentModes2EXT_placeholder    = 0;
 #endif /*VK_USE_PLATFORM_WIN32_KHR*/
 
     //=== VK_EXT_headless_surface ===
@@ -17616,19 +17618,19 @@ namespace VULKAN_HPP_NAMESPACE
     PFN_vkDestroyCudaFunctionNV vkDestroyCudaFunctionNV = 0;
     PFN_vkCmdCudaLaunchKernelNV vkCmdCudaLaunchKernelNV = 0;
 #else
-    PFN_dummy vkCreateCudaModuleNV_placeholder                              = 0;
-    PFN_dummy vkGetCudaModuleCacheNV_placeholder                            = 0;
-    PFN_dummy vkCreateCudaFunctionNV_placeholder                            = 0;
-    PFN_dummy vkDestroyCudaModuleNV_placeholder                             = 0;
-    PFN_dummy vkDestroyCudaFunctionNV_placeholder                           = 0;
-    PFN_dummy vkCmdCudaLaunchKernelNV_placeholder                           = 0;
+    PFN_dummy vkCreateCudaModuleNV_placeholder    = 0;
+    PFN_dummy vkGetCudaModuleCacheNV_placeholder  = 0;
+    PFN_dummy vkCreateCudaFunctionNV_placeholder  = 0;
+    PFN_dummy vkDestroyCudaModuleNV_placeholder   = 0;
+    PFN_dummy vkDestroyCudaFunctionNV_placeholder = 0;
+    PFN_dummy vkCmdCudaLaunchKernelNV_placeholder = 0;
 #endif /*VK_ENABLE_BETA_EXTENSIONS*/
 
 #if defined( VK_USE_PLATFORM_METAL_EXT )
     //=== VK_EXT_metal_objects ===
     PFN_vkExportMetalObjectsEXT vkExportMetalObjectsEXT = 0;
 #else
-    PFN_dummy vkExportMetalObjectsEXT_placeholder                           = 0;
+    PFN_dummy vkExportMetalObjectsEXT_placeholder = 0;
 #endif /*VK_USE_PLATFORM_METAL_EXT*/
 
     //=== VK_KHR_synchronization2 ===
@@ -17678,8 +17680,8 @@ namespace VULKAN_HPP_NAMESPACE
     PFN_vkAcquireWinrtDisplayNV vkAcquireWinrtDisplayNV = 0;
     PFN_vkGetWinrtDisplayNV     vkGetWinrtDisplayNV     = 0;
 #else
-    PFN_dummy vkAcquireWinrtDisplayNV_placeholder                           = 0;
-    PFN_dummy vkGetWinrtDisplayNV_placeholder                               = 0;
+    PFN_dummy vkAcquireWinrtDisplayNV_placeholder = 0;
+    PFN_dummy vkGetWinrtDisplayNV_placeholder     = 0;
 #endif /*VK_USE_PLATFORM_WIN32_KHR*/
 
 #if defined( VK_USE_PLATFORM_DIRECTFB_EXT )
@@ -17699,8 +17701,8 @@ namespace VULKAN_HPP_NAMESPACE
     PFN_vkGetMemoryZirconHandleFUCHSIA           vkGetMemoryZirconHandleFUCHSIA           = 0;
     PFN_vkGetMemoryZirconHandlePropertiesFUCHSIA vkGetMemoryZirconHandlePropertiesFUCHSIA = 0;
 #else
-    PFN_dummy vkGetMemoryZirconHandleFUCHSIA_placeholder                    = 0;
-    PFN_dummy vkGetMemoryZirconHandlePropertiesFUCHSIA_placeholder          = 0;
+    PFN_dummy vkGetMemoryZirconHandleFUCHSIA_placeholder           = 0;
+    PFN_dummy vkGetMemoryZirconHandlePropertiesFUCHSIA_placeholder = 0;
 #endif /*VK_USE_PLATFORM_FUCHSIA*/
 
 #if defined( VK_USE_PLATFORM_FUCHSIA )
@@ -17708,8 +17710,8 @@ namespace VULKAN_HPP_NAMESPACE
     PFN_vkImportSemaphoreZirconHandleFUCHSIA vkImportSemaphoreZirconHandleFUCHSIA = 0;
     PFN_vkGetSemaphoreZirconHandleFUCHSIA    vkGetSemaphoreZirconHandleFUCHSIA    = 0;
 #else
-    PFN_dummy vkImportSemaphoreZirconHandleFUCHSIA_placeholder              = 0;
-    PFN_dummy vkGetSemaphoreZirconHandleFUCHSIA_placeholder                 = 0;
+    PFN_dummy vkImportSemaphoreZirconHandleFUCHSIA_placeholder = 0;
+    PFN_dummy vkGetSemaphoreZirconHandleFUCHSIA_placeholder    = 0;
 #endif /*VK_USE_PLATFORM_FUCHSIA*/
 
 #if defined( VK_USE_PLATFORM_FUCHSIA )
@@ -17720,11 +17722,11 @@ namespace VULKAN_HPP_NAMESPACE
     PFN_vkDestroyBufferCollectionFUCHSIA              vkDestroyBufferCollectionFUCHSIA              = 0;
     PFN_vkGetBufferCollectionPropertiesFUCHSIA        vkGetBufferCollectionPropertiesFUCHSIA        = 0;
 #else
-    PFN_dummy vkCreateBufferCollectionFUCHSIA_placeholder                   = 0;
-    PFN_dummy vkSetBufferCollectionImageConstraintsFUCHSIA_placeholder      = 0;
-    PFN_dummy vkSetBufferCollectionBufferConstraintsFUCHSIA_placeholder     = 0;
-    PFN_dummy vkDestroyBufferCollectionFUCHSIA_placeholder                  = 0;
-    PFN_dummy vkGetBufferCollectionPropertiesFUCHSIA_placeholder            = 0;
+    PFN_dummy vkCreateBufferCollectionFUCHSIA_placeholder               = 0;
+    PFN_dummy vkSetBufferCollectionImageConstraintsFUCHSIA_placeholder  = 0;
+    PFN_dummy vkSetBufferCollectionBufferConstraintsFUCHSIA_placeholder = 0;
+    PFN_dummy vkDestroyBufferCollectionFUCHSIA_placeholder              = 0;
+    PFN_dummy vkGetBufferCollectionPropertiesFUCHSIA_placeholder        = 0;
 #endif /*VK_USE_PLATFORM_FUCHSIA*/
 
     //=== VK_HUAWEI_subpass_shading ===
@@ -17752,8 +17754,8 @@ namespace VULKAN_HPP_NAMESPACE
     PFN_vkCreateScreenSurfaceQNX                        vkCreateScreenSurfaceQNX                        = 0;
     PFN_vkGetPhysicalDeviceScreenPresentationSupportQNX vkGetPhysicalDeviceScreenPresentationSupportQNX = 0;
 #else
-    PFN_dummy vkCreateScreenSurfaceQNX_placeholder                          = 0;
-    PFN_dummy vkGetPhysicalDeviceScreenPresentationSupportQNX_placeholder   = 0;
+    PFN_dummy vkCreateScreenSurfaceQNX_placeholder                        = 0;
+    PFN_dummy vkGetPhysicalDeviceScreenPresentationSupportQNX_placeholder = 0;
 #endif /*VK_USE_PLATFORM_SCREEN_QNX*/
 
     //=== VK_EXT_color_write_enable ===
@@ -17888,7 +17890,7 @@ namespace VULKAN_HPP_NAMESPACE
     //=== VK_QNX_external_memory_screen_buffer ===
     PFN_vkGetScreenBufferPropertiesQNX vkGetScreenBufferPropertiesQNX = 0;
 #else
-    PFN_dummy vkGetScreenBufferPropertiesQNX_placeholder                    = 0;
+    PFN_dummy vkGetScreenBufferPropertiesQNX_placeholder = 0;
 #endif /*VK_USE_PLATFORM_SCREEN_QNX*/
 
     //=== VK_KHR_line_rasterization ===

@@ -8,10 +8,12 @@
 #ifndef VULKAN_EXTENSION_INSPECTION_HPP
 #define VULKAN_EXTENSION_INSPECTION_HPP
 
-#include <map>
-#include <set>
-#include <string>
-#include <vector>
+#ifndef VULKAN_HPP_USE_STD_MODULE
+#  include <map>
+#  include <set>
+#  include <string>
+#  include <vector>
+#endif
 #include <vulkan/vulkan.hpp>
 
 namespace VULKAN_HPP_NAMESPACE
